@@ -27,7 +27,11 @@ def check_ace(hand):
       if card == 11:
         index = hand.index(card)
         hand[index] = 1
-        print(f"Ace card becomes 1. Your cards are {hand}. Total is {sum(hand)}")
+        if hand[0] == 0:
+          return
+        else:
+          print(f"Ace card becomes 1.")
+          return
   else:
     return
   
@@ -46,11 +50,11 @@ def check_win(user_arg, cpu_arg, play, hit):
   # if win_flag == False:
   if user_arg == 21:
     # user_win = True
-    print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou Win!")
+    print(f"You have 21! \nYou Win!")
     check_reset(play)
   elif cpu_arg == 21:
     # user_win = False
-    print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou lose!")
+    print(f"You have {user_arg} & CPU has 21! \nYou lose!")
     check_reset(play)
   
   if hit:
@@ -83,38 +87,27 @@ def blackjack():
   while keep_playing == True:
     hitting = True
     user_cards = [random.choice(deck), random.choice(deck)]
-    cpu_cards = [random.choice(deck), random.choice(deck)]
+    cpu_cards = [0, random.choice(deck), random.choice(deck)]
     user = sum(user_cards)
     cpu = sum(cpu_cards)
 
     check_win(user, cpu, keep_playing, hitting)
   
-    # if user == 21:
-    #   if cpu == 21:
-    #     print('You have 21. Tie!')
-    #     reset = input("Would you like to play again? Type y or n \n")
-    #   print('You have 21, you win!')
-    #   reset = input("Would you like to play again? Type y or n \n")
-    # if cpu == 21:
-    #   print('CPU has 21. You lose!')
-    #   reset = input("Would you like to play again? Type y or n \n")
-  
-    print(f'CPUs cards: {cpu_cards[0]} & {cpu_cards[1]} \nTotal: {cpu}')
+    # Print below for testing
+    # print(f'CPUs cards: {cpu_cards} \nTotal: {cpu}')
   
     while hitting and user < 21:
       draw_again = input(f"Your cards: {user_cards} \nTotal: {user} \nWould you like to draw a card? Type y for another card\n")
       if draw_again == 'y':
         user_cards.append(random.choice(deck))
+        check_ace(user_cards)
         user = sum(user_cards)
         print(user_cards)
-        card_amount = int(len(user_cards) - 1)
-        check_ace(user_cards)
-        # if user > 21:
-        #   reset = input(f"You drew {user_cards[card_amount]} for a total of {user}. You lose! \nWould you like to play again? Type y or n \n")
       else:
         hitting = False
         while cpu < 17:
           cpu_hit = random.choice(deck)
+          check_ace(cpu_cards)
           cpu += cpu_hit
     hitting = False
 
