@@ -30,34 +30,53 @@ def check_ace(hand):
         print(f"Ace card becomes 1. Your cards are {hand}. Total is {sum(hand)}")
   else:
     return
+  
+# def game_over(winner, flag, play):
+#   flag = True
+#   if winner:
+#     print(f"You have {user} & CPU has {cpu}.\nYou Win!")
+#     check_reset(play)
+#   else:
+#     print(f"You have {user} & CPU has {cpu}.\nYou lose!")
+#     check_reset(play)
 
-def check_win(user_arg, cpu_arg, flag):
-  win = False
+def check_win(user_arg, cpu_arg, play, hit):
+  # win_flag = False
+  # user_win = False
+  # if win_flag == False:
   if user_arg == 21:
+    # user_win = True
     print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou Win!")
-    win = True
+    check_reset(play)
   elif cpu_arg == 21:
+    # user_win = False
     print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou lose!")
-    win = True
+    check_reset(play)
+  
+  if hit:
+    return
   elif cpu_arg > 21:
     print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou Win!")
-    win = True
+    check_reset(play)
   elif user_arg > 21:
     print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou lose!")
-    win = True
+    check_reset(play)
+  elif user_arg == cpu_arg:
+    print(f"You have {user_arg} & CPU has {cpu_arg}.\nIt's a tie!")
+    check_reset(play)
+  
 
-  return
-  # elif user_arg > cpu_arg:
-  #   print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou Win!")
-  #   win = True
-  # elif user_arg == cpu_arg:
-  #   print(f"You have {user_arg} & CPU has {cpu_arg}.\nTie!")
-  #   win = True
-  # else:
-  #   print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou lose!")
-  #   win = True
-  # if win == True:
-  #   check_reset(flag)
+  if user_arg > cpu_arg:
+    print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou Win!")
+    win_flag = True
+  elif user_arg == cpu_arg:
+    print(f"You have {user_arg} & CPU has {cpu_arg}.\nTie!")
+    win_flag = True
+  else:
+    print(f"You have {user_arg} & CPU has {cpu_arg}.\nYou lose!")
+    win_flag = True
+  if win_flag == True:
+    check_reset(play)
 
 def blackjack():
   keep_playing = True
@@ -68,7 +87,7 @@ def blackjack():
     user = sum(user_cards)
     cpu = sum(cpu_cards)
 
-    check_win(user, cpu, keep_playing)
+    check_win(user, cpu, keep_playing, hitting)
   
     # if user == 21:
     #   if cpu == 21:
@@ -97,8 +116,9 @@ def blackjack():
         while cpu < 17:
           cpu_hit = random.choice(deck)
           cpu += cpu_hit
+    hitting = False
 
-    check_win(user, cpu, keep_playing)
+    check_win(user, cpu, keep_playing, hitting)
 
     check_reset(keep_playing)
 
