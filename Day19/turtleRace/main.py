@@ -36,7 +36,7 @@ def start_race():
     turtles.append(t)
     print(t.color)
   bet = input("Who do you bet to win the race? Enter a color: ")
-  while winner != True:
+  while not winner:
     for t in turtles:
       dist = random.randint(0, 6,)
       t.forward(dist)
