@@ -3,6 +3,7 @@ from turtle import Turtle
 STARTING_POSITIONS = [(0, 0), (-20, 0), (-40, 0)]
 MOVE_DIST = 20
 
+
 class NewSnake:
   def __init__(self):
     self.snake_segs = []
@@ -42,7 +43,7 @@ class NewSnake:
   def grow(self):
     t = Turtle('square')
     t.pu()
-    t.color('white')
+    t.color('GhostWhite')
     grow_pos = self.snake_segs[len(self.snake_segs) - 1].pos()
     t.setpos(grow_pos)
     self.snake_segs.append(t)

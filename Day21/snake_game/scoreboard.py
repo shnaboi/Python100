@@ -9,19 +9,21 @@ class Scoreboard(Turtle):
     self.score = 0
     self.pu()
     self.text = f"Score: {self.score}"
-    self.color('white')
-    self.setpos(0, 275)
+    self.color('gainsboro')
     self.update_scoreboard()
     self.hideturtle()
 
   def update_scoreboard(self):
     self.clear()
+    self.setpos(0, 275)
     self.write(f"Score: {self.score}", align=ALIGNMENT, font=FONT)
   def score_up(self):
     self.score += 1
     self.update_scoreboard()
 
   def game_over(self):
+    self.update_scoreboard()
     self.setpos(0, 0)
-    self.color('azure')
+    self.color('gainsboro')
     self.write("GAME OVER", align=ALIGNMENT, font=('Courier', 15, 'normal'))
+    print(self.text)
