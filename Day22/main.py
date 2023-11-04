@@ -17,6 +17,7 @@ ball = Ball()
 
 left_paddle = paddle.paddles[0]
 bot = paddle.paddles[1]
+ball_y = ball.y
 
 screen.onkeypress(fun=paddle.up, key='Left')
 screen.onkeypress(fun=paddle.down, key='Right')
@@ -25,10 +26,8 @@ gaming = True
 while gaming:
   screen.update()
   time.sleep(.01)
+  ball_y = ball.y
   ball.move_ball(left_paddle, bot)
-  # Create ball
-
-  # Test movement with bot
-  # paddle.movebot()
+  paddle.movebot(ball_y)
 
 screen.exitonclick()

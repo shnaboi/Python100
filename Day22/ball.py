@@ -5,9 +5,10 @@ turtle.mode('logo')
 class Ball:
 
   def __init__(self):
+    self.y = 1
     self.list = []
     self.user_score = False
-    self.heading = 90
+    self.heading = 290
     self.speed = 2
     self.create_ball()
     self.ball = self.list[0]
@@ -34,9 +35,10 @@ class Ball:
   def move_ball(self, l, r):
     self.ball.forward(self.speed)
     self.check_collide(l, r)
+    self.y = self.ball.ycor()
 
   def check_collide(self, l_paddle, r_paddle):
-    # if ball hits wall
+    # if ball hits north wall
     if self.ball.ycor() > 399:
       if self.ball.heading() < 180:
         angle = 180 - self.ball.heading()
@@ -45,6 +47,7 @@ class Ball:
         angle = self.ball.heading() - 270
         new_head = 270 - angle
         self.ball.seth(new_head)
+    # if ball hits south wall
     elif self.ball.ycor() < -399:
       if self.ball.heading() < 180:
         angle = self.ball.heading() - 90
@@ -58,12 +61,11 @@ class Ball:
     # if ball hits paddle
     if self.ball.distance(l_paddle) < 50 and -580 < self.ball.xcor() < -570:
       self.ball.seth(self.ball.heading() - 180)
+      self.speed += .2
 
     if self.ball.distance(r_paddle) < 50 and 570 < self.ball.xcor() < 580:
       self.ball.seth(self.ball.heading() + 180)
-
-    # self.speed += 2
-    # if self.ball[0] and
+      self.speed += .2
 
     # if ball hits edge of screen (score)
     if self.ball.xcor() < -599:

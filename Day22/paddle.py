@@ -6,29 +6,32 @@ class Paddle:
 
   def __init__(self):
     self.paddles = []
-    self.user = self.new_paddle(START_POSITIONS[0])
-    self.bot = self.new_paddle(START_POSITIONS[1])
-    self.speed = .01
+    self.create_paddles()
+    self.user = self.paddles[0]
+    self.bot = self.paddles[1]
+    self.bot_speed = 10
 
-  def new_paddle(self, pos):
-    p = Turtle("square")
-    p.pu()
-    p.color('white')
-    p.setpos(pos)
-    p.shapesize(stretch_wid=.75, stretch_len=5)
-    p.setheading(180)
-    # self.test = p.getcanvas()
-    self.paddles.append(p)
+  def create_paddles(self):
+    for pos in START_POSITIONS:
+      p = Turtle("square")
+      p.pu()
+      p.color('white')
+      p.setpos(pos)
+      p.shapesize(stretch_wid=.75, stretch_len=5)
+      p.setheading(180)
+      self.paddles.append(p)
 
-  def movebot(self):
-    self.paddles[1].setheading(90)
-    self.paddles[1].forward(7)
+  def movebot(self, ball_y):
+    while self.bot.ycor() < ball_y:
+      self.bot.seth(0)
+      self.bot.forward(1.5)
+    if self.bot.ycor() > ball_y:
+      self.bot.seth(180)
+      self.bot.forward(1.5)
 
   def up(self):
     self.paddles[0].setheading(0)
     self.paddles[0].forward(10)
-
-
   def down(self):
     self.paddles[0].setheading(180)
     self.paddles[0].forward(10)
