@@ -17,7 +17,7 @@ class Paddle:
       p.pu()
       p.color('white')
       p.setpos(pos)
-      p.shapesize(stretch_wid=.75, stretch_len=5)
+      p.shapesize(stretch_wid=.75, stretch_len=4.25)
       p.setheading(180)
       self.paddles.append(p)
 

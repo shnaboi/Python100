@@ -26,8 +26,20 @@ gaming = True
 while gaming:
   screen.update()
   time.sleep(.01)
+
+  # Update bot's pos based on ball's pos
   ball_y = ball.y
   ball.move_ball(left_paddle, bot)
   paddle.movebot(ball_y)
+
+  # Check if ball was scored
+  if ball.score_toggle == True:
+    if ball.user_score == True:
+      score.user_score += 1
+      score.update_scoreboard()
+    else:
+      score.bot_score += 1
+      score.update_scoreboard()
+  ball.score_toggle = False
 
 screen.exitonclick()
