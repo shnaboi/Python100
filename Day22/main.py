@@ -30,16 +30,19 @@ while gaming:
   # Update bot's pos based on ball's pos
   ball_y = ball.y
   ball.move_ball(left_paddle, bot)
-  paddle.movebot(ball_y)
+  paddle.movebot(ball_y, score.user_score)
 
   # Check if ball was scored
   if ball.score_toggle == True:
     if ball.user_score == True:
       score.user_score += 1
       score.update_scoreboard()
+      paddle.bot_speed += .2
+      ball.reset_ball(score.user_score)
     else:
       score.bot_score += 1
       score.update_scoreboard()
+      ball.reset_ball(score.user_score)
   ball.score_toggle = False
 
 screen.exitonclick()

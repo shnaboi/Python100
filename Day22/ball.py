@@ -9,7 +9,7 @@ class Ball:
     self.list = []
     self.user_score = False
     self.p_angle = 0
-    self.speed = 2
+    self.speed = 2.5
     self.create_ball()
     self.ball = self.list[0]
     self.score_toggle = None
@@ -25,13 +25,14 @@ class Ball:
     b.seth(270)
     self.list.append(b)
 
-  def reset_ball(self):
+  def reset_ball(self, user_score):
     self.ball.setpos(0, 0)
-    self.speed = 2.5
+    self.speed = 2.5 + (user_score * .2)
     if self.user_score == True:
       self.ball.seth(270)
     else:
       self.ball.seth(90)
+    print(f"Ball speed = {self.speed}")
 
   def move_ball(self, l, r):
     self.ball.forward(self.speed)
@@ -48,12 +49,13 @@ class Ball:
       b = a - 90
       c = 90 - b
       # c == new angle without dist from center effecting angle
-      d = c * angle_change_var
-      e = d - c
-      f = c - e
+      d = self.ball.distance(l_paddle) * (.69)
+      e = c - d
+      if e < 10:
+        e = 11
       # f == new angle after effect by dist from center
-      self.ball.seth(f)
-      print(f"head = {f}")
+      self.ball.seth(e)
+      print(f"head = {e}")
       print(f"C = {c}")
     else:
       print(f"head before calc = {cur_angle}")
@@ -62,10 +64,12 @@ class Ball:
       b = a - 90
       c = 90 - b
       # c == new angle without dist from center effecting angle
-      angle_change_var = (self.ball.distance(l_paddle) * .01) + 1
-      d = c * angle_change_var
-      self.ball.seth(d)
-      print(f"head = {d}")
+      d = self.ball.distance(l_paddle) * (.69)
+      e = c + d
+      if e > 170:
+        e = 169
+      self.ball.seth(e)
+      print(f"head = {e}")
       print(f"C = {c}")
 
 
@@ -112,11 +116,9 @@ class Ball:
     if self.ball.xcor() < -599:
       self.user_score = False
       self.score_toggle = True
-      self.reset_ball()
     elif self.ball.xcor() > 599:
       self.user_score = True
       self.score_toggle = True
-      self.reset_ball()
 
 
 

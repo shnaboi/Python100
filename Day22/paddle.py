@@ -9,7 +9,7 @@ class Paddle:
     self.create_paddles()
     self.user = self.paddles[0]
     self.bot = self.paddles[1]
-    self.bot_speed = 10
+    self.bot_speed = 1.69
 
   def create_paddles(self):
     for pos in START_POSITIONS:
@@ -21,13 +21,14 @@ class Paddle:
       p.setheading(180)
       self.paddles.append(p)
 
-  def movebot(self, ball_y):
+  def movebot(self, ball_y, user_score):
+    # for every point user has, increase bot_speed += .02
     if self.bot.ycor() < ball_y:
       self.bot.seth(0)
-      self.bot.forward(1.5)
+      self.bot.forward(self.bot_speed)
     if self.bot.ycor() > ball_y:
       self.bot.seth(180)
-      self.bot.forward(1.5)
+      self.bot.forward(self.bot_speed)
 
   def up(self):
     self.paddles[0].setheading(0)
