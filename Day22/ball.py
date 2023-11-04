@@ -43,7 +43,7 @@ class Ball:
     if self.ball.ycor() > l_paddle.ycor():
       angle_change_var = (self.ball.distance(l_paddle) * .01) + 1
       print(f"head before calc = {cur_angle}")
-      print(f"dist = {angle_change_var}")
+      print(f"dist = {self.ball.distance(l_paddle)}")
       a = cur_angle - 180
       b = a - 90
       c = 90 - b
@@ -62,7 +62,7 @@ class Ball:
       b = a - 90
       c = 90 - b
       # c == new angle without dist from center effecting angle
-      angle_change_var = ((self.ball.distance(l_paddle) / 2) * .01) + 1
+      angle_change_var = (self.ball.distance(l_paddle) * .01) + 1
       d = c * angle_change_var
       self.ball.seth(d)
       print(f"head = {d}")
