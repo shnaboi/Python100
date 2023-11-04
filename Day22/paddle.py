@@ -22,7 +22,7 @@ class Paddle:
       self.paddles.append(p)
 
   def movebot(self, ball_y):
-    while self.bot.ycor() < ball_y:
+    if self.bot.ycor() < ball_y:
       self.bot.seth(0)
       self.bot.forward(1.5)
     if self.bot.ycor() > ball_y:

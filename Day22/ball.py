@@ -8,7 +8,7 @@ class Ball:
     self.y = 1
     self.list = []
     self.user_score = False
-    self.heading = 290
+    self.p_angle = 0
     self.speed = 2
     self.create_ball()
     self.ball = self.list[0]
@@ -22,7 +22,7 @@ class Ball:
     b.shapesize(stretch_wid=.5, stretch_len=.5)
     b.color('white')
     b.setpos(0, 0)
-    b.seth(self.heading)
+    b.seth(270)
     self.list.append(b)
 
   def reset_ball(self):
@@ -37,6 +37,37 @@ class Ball:
     self.ball.forward(self.speed)
     self.check_collide(l, r)
     self.y = self.ball.ycor()
+
+  def change_p_angle(self, l_paddle):
+    cur_angle = self.ball.heading()
+    if self.ball.ycor() > l_paddle.ycor():
+      angle_change_var = (self.ball.distance(l_paddle) * .01) + 1
+      print(f"head before calc = {cur_angle}")
+      print(f"dist = {angle_change_var}")
+      a = cur_angle - 180
+      b = a - 90
+      c = 90 - b
+      # c == new angle without dist from center effecting angle
+      d = c * angle_change_var
+      e = d - c
+      f = c - e
+      # f == new angle after effect by dist from center
+      self.ball.seth(f)
+      print(f"head = {f}")
+      print(f"C = {c}")
+    else:
+      print(f"head before calc = {cur_angle}")
+      print(f"dist = {(self.ball.distance(l_paddle))}")
+      a = cur_angle - 180
+      b = a - 90
+      c = 90 - b
+      # c == new angle without dist from center effecting angle
+      angle_change_var = ((self.ball.distance(l_paddle) / 2) * .01) + 1
+      d = c * angle_change_var
+      self.ball.seth(d)
+      print(f"head = {d}")
+      print(f"C = {c}")
+
 
   def check_collide(self, l_paddle, r_paddle):
 
@@ -61,17 +92,18 @@ class Ball:
         new_head = 360 - angle
         self.ball.seth(new_head)
 
-    # if ball hits paddle
+    # if user hits ball
     if self.ball.distance(l_paddle) < 48 and -580 < self.ball.xcor() < -570:
-      self.ball.seth(self.ball.heading() - 180)
+      self.change_p_angle(l_paddle)
       self.speed += .2
-      print(self.ball.distance(l_paddle))
       # move ball's xcor so it doesn't get stuck in paddle and then sling shot
-      self.ball.setx(self.ball.xcor() + 5)
+      self.ball.setx(self.ball.xcor() + 10)
 
-    if self.ball.distance(r_paddle) < 50 and 570 < self.ball.xcor() < 580:
+    # if bot hits ball
+    if self.ball.distance(r_paddle) < 48 and 570 < self.ball.xcor() < 580:
       self.ball.seth(self.ball.heading() + 180)
       self.speed += .2
+      self.ball.setx(self.ball.xcor() - 2.5)
 
     # if ball hits edge of screen (score)
     if self.ball.xcor() < -599:
