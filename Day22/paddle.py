@@ -1,6 +1,6 @@
 from turtle import Turtle
 
-START_POSITIONS = [(-550, 0), (550, 0)]
+START_POSITIONS = [(-575, 0), (575, 0)]
 
 class Paddle:
 

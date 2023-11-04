@@ -7,7 +7,7 @@ class Ball:
   def __init__(self):
     self.list = []
     self.user_score = False
-    self.heading = 315
+    self.heading = 90
     self.speed = 2
     self.create_ball()
     self.ball = self.list[0]
@@ -20,43 +20,47 @@ class Ball:
     b.shapesize(stretch_wid=.5, stretch_len=.5)
     b.color('white')
     b.setpos(0, 0)
-    b.setheading(self.heading)
+    b.seth(self.heading)
     self.speed = 2.5
     self.list.append(b)
 
   def reset_ball(self):
     self.ball.setpos(0, 0)
     if self.user_score == True:
-      self.ball.setheading(180)
+      self.ball.seth(180)
     else:
-      self.ball.setheading(0)
+      self.ball.seth(0)
 
-  def move_ball(self):
+  def move_ball(self, l, r):
     self.ball.forward(self.speed)
-    self.check_collide()
+    self.check_collide(l, r)
 
-  def check_collide(self):
+  def check_collide(self, l_paddle, r_paddle):
     # if ball hits wall
     if self.ball.ycor() > 399:
       if self.ball.heading() < 180:
         angle = 180 - self.ball.heading()
-        self.ball.setheading(angle)
+        self.ball.seth(angle)
       else:
         angle = self.ball.heading() - 270
         new_head = 270 - angle
-        self.ball.setheading(new_head)
+        self.ball.seth(new_head)
     elif self.ball.ycor() < -399:
       if self.ball.heading() < 180:
         angle = self.ball.heading() - 90
         new_head = 90 - angle
-        self.ball.setheading(new_head)
+        self.ball.seth(new_head)
       else:
         angle = self.ball.heading() - 180
         new_head = 360 - angle
-        self.ball.setheading(new_head)
-
+        self.ball.seth(new_head)
 
     # if ball hits paddle
+    if self.ball.distance(l_paddle) < 50 and -580 < self.ball.xcor() < -570:
+      self.ball.seth(self.ball.heading() - 180)
+
+    if self.ball.distance(r_paddle) < 50 and 570 < self.ball.xcor() < 580:
+      self.ball.seth(self.ball.heading() + 180)
 
     # self.speed += 2
     # if self.ball[0] and
