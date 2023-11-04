@@ -101,7 +101,10 @@ class Ball:
 
     # if bot hits ball
     if self.ball.distance(r_paddle) < 48 and 570 < self.ball.xcor() < 580:
-      self.ball.seth(self.ball.heading() + 180)
+      a = self.ball.heading()
+      b = 360 + a
+      c = b - (a * 2)
+      self.ball.seth(c)
       self.speed += .2
       self.ball.setx(self.ball.xcor() - 2.5)
 
