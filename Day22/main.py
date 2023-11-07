@@ -45,7 +45,6 @@ while gaming:
       ball.reset_ball(score.user_score)
   ball.score_toggle = False
 
-# TODO Make ball spawn at angle +/- 10 of horizontal
 # TODO Add minor ball angle change to bot
 
 screen.exitonclick()

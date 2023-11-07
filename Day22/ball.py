@@ -1,7 +1,9 @@
 from turtle import Turtle
 import turtle
+
 turtle.mode('logo')
 import random
+
 
 class Ball:
 
@@ -30,7 +32,7 @@ class Ball:
     self.speed = 2.5 + (user_score * .2)
     bot_head = random.randint(80, 100)
     user_head = random.randint(260, 280)
-    if self.user_score == True:
+    if self.user_score:
       self.ball.setpos(100, 0)
       self.ball.seth(user_head)
     else:
@@ -46,9 +48,6 @@ class Ball:
   def change_p_angle(self, l_paddle):
     cur_angle = self.ball.heading()
     if self.ball.ycor() > l_paddle.ycor():
-      angle_change_var = (self.ball.distance(l_paddle) * .01) + 1
-      print(f"head before calc = {cur_angle}")
-      print(f"dist = {self.ball.distance(l_paddle)}")
       a = cur_angle - 180
       b = a - 90
       c = 90 - b
@@ -57,13 +56,10 @@ class Ball:
       e = c - d
       if e < 10:
         e = 11
-      # f == new angle after effect by dist from center
+      # e == new angle after effect by dist from center
       self.ball.seth(e)
-      print(f"head = {e}")
-      print(f"C = {c}")
+      print(f"User spin = {e - c}")
     else:
-      print(f"head before calc = {cur_angle}")
-      print(f"dist = {(self.ball.distance(l_paddle))}")
       a = cur_angle - 180
       b = a - 90
       c = 90 - b
@@ -73,9 +69,7 @@ class Ball:
       if e > 170:
         e = 169
       self.ball.seth(e)
-      print(f"head = {e}")
-      print(f"C = {c}")
-
+      print(f"User spin = {e - c}")
 
   def check_collide(self, l_paddle, r_paddle):
 
@@ -112,9 +106,25 @@ class Ball:
       a = self.ball.heading()
       b = 360 + a
       c = b - (a * 2)
-      self.ball.seth(c)
-      self.speed += .2
-      self.ball.setx(self.ball.xcor() - 2.5)
+      # if bot slices
+      if r_paddle.ycor() < self.ball.ycor() and self.ball.heading() > 90 and r_paddle.distance(self.ball) > 10:
+        slice = r_paddle.distance(self.ball) * (.69)
+        bot_slice = c - slice
+        self.ball.seth(bot_slice)
+        self.ball.setx(self.ball.xcor() - 10)
+        self.speed += (r_paddle.distance(self.ball) * .05)
+        print(f"Bot SLICE! Spin = {slice}")
+      elif r_paddle.ycor() > self.ball.ycor() and self.ball.heading() < 90 and r_paddle.distance(self.ball) > 10:
+        slice = r_paddle.distance(self.ball) * (.69)
+        bot_slice = c + slice
+        self.ball.seth(bot_slice)
+        self.ball.setx(self.ball.xcor() - 10)
+        self.speed += (r_paddle.distance(self.ball) * .05)
+        print(f"Bot SLICE! Spin = {slice}")
+      else:
+        self.ball.seth(c)
+        self.speed += .2
+        self.ball.setx(self.ball.xcor() - 2.5)
 
     # if ball hits edge of screen (score)
     if self.ball.xcor() < -599:
@@ -123,10 +133,5 @@ class Ball:
     elif self.ball.xcor() > 599:
       self.user_score = True
       self.score_toggle = True
-
-
-
-
-
 
     # have change heading func to determine bounce angle
