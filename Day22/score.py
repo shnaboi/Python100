@@ -6,6 +6,7 @@ class Score(Turtle):
 
   def __init__(self):
     super().__init__()
+    self.win_toggle = None
     self.user_score = 0
     self.bot_score = 0
     self.mode_text = None
@@ -39,57 +40,57 @@ class Score(Turtle):
       self.mode = "core"
       self.update_scoreboard()
 
-  def check_win(self, gaming):
+  def check_win(self):
     if self.mode == "easy":
       if self.user_score >= 7:
         if self.bot_score <= (self.user_score - 2):
           print("User wins!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
       elif self.bot_score >= 7:
         if self.user_score <= (self.bot_score - 2):
           print("Bot wins! You lose!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
     elif self.mode == "med":
       if self.user_score >= 11:
         if self.bot_score <= (self.user_score - 2):
           print("User wins!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
       elif self.bot_score >= 11:
         if self.user_score <= (self.bot_score - 2):
           print("Bot wins! You lose!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
     elif self.mode == "hard":
       if self.user_score >= 21:
         if self.bot_score <= (self.user_score - 2):
           print("User wins!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
       elif self.bot_score >= 21:
         if self.user_score <= (self.bot_score - 2):
           print("Bot wins! You lose!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
     elif self.mode == "core":
       if self.user_score >= 15:
         if self.bot_score <= (self.user_score - 15):
           print("User wins!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
       elif self.bot_score >= 15:
         if self.user_score <= (self.bot_score - 15):
           print("Bot wins! You lose!")
-          gaming = False
+          self.win_toggle = True
         else:
           pass
 

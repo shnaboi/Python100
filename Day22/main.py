@@ -43,14 +43,16 @@ while gaming:
       score.user_score += 1
       score.update_scoreboard()
       paddle.bot_speed += .2
-      score.check_win(gaming)
+      score.check_win()
       ball.reset_ball(score.user_score)
     else:
       score.bot_score += 1
       score.update_scoreboard()
-      score.check_win(gaming)
+      score.check_win()
       ball.reset_ball(score.user_score)
   ball.score_toggle = False
+  if score.win_toggle == True:
+    gaming = False
 
 # Easy mode = first to 7 points, win by 2
 # Medium mode = first to 11 points, win by 2
