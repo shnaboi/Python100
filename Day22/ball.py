@@ -1,6 +1,7 @@
 from turtle import Turtle
 import turtle
 turtle.mode('logo')
+import random
 
 class Ball:
 
@@ -26,12 +27,15 @@ class Ball:
     self.list.append(b)
 
   def reset_ball(self, user_score):
-    self.ball.setpos(0, 0)
     self.speed = 2.5 + (user_score * .2)
+    bot_head = random.randint(80, 100)
+    user_head = random.randint(260, 280)
     if self.user_score == True:
-      self.ball.seth(270)
+      self.ball.setpos(100, 0)
+      self.ball.seth(user_head)
     else:
-      self.ball.seth(90)
+      self.ball.setpos(0, 0)
+      self.ball.seth(bot_head)
     print(f"Ball speed = {self.speed}")
 
   def move_ball(self, l, r):

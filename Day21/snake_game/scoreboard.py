@@ -26,4 +26,4 @@ class Scoreboard(Turtle):
     self.setpos(0, 0)
     self.color('gainsboro')
     self.write("GAME OVER", align=ALIGNMENT, font=('Courier', 15, 'normal'))
-    print(self.text)
+    print(self.score)
