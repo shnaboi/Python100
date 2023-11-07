@@ -22,6 +22,11 @@ ball_y = ball.y
 screen.onkeypress(fun=paddle.up, key='Left')
 screen.onkeypress(fun=paddle.down, key='Right')
 
+level = input("Which mode would you like to play? \n1 - Easy: First to score 7, win by 2 \n2 - Medium: First to score "
+              "11, win by 2 \n3 - Hard: First to score 21, win by 2 \n4 - Hardcore: First to be ahead by 15 points \n")
+
+score.check_level(level)
+
 gaming = True
 while gaming:
   screen.update()
@@ -38,13 +43,18 @@ while gaming:
       score.user_score += 1
       score.update_scoreboard()
       paddle.bot_speed += .2
+      score.check_win(gaming)
       ball.reset_ball(score.user_score)
     else:
       score.bot_score += 1
       score.update_scoreboard()
+      score.check_win(gaming)
       ball.reset_ball(score.user_score)
   ball.score_toggle = False
 
-# TODO Add minor ball angle change to bot
+# Easy mode = first to 7 points, win by 2
+# Medium mode = first to 11 points, win by 2
+# Hard Mode = first to 21 points, win by 2
+# Hardcore = first to 15, win by 15
 
 screen.exitonclick()
