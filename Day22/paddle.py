@@ -36,5 +36,3 @@ class Paddle:
   def down(self):
     self.paddles[0].setheading(180)
     self.paddles[0].forward(10)
-
-  # def move(self):

@@ -4,7 +4,6 @@ import turtle
 turtle.mode('logo')
 import random
 
-
 class Ball:
 
   def __init__(self):
@@ -16,7 +15,6 @@ class Ball:
     self.create_ball()
     self.ball = self.list[0]
     self.score_toggle = None
-    # self.move_ball()
 
   def create_ball(self):
     b = Turtle('circle')
