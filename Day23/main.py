@@ -20,12 +20,15 @@ screen.onkeypress(fun=player.down, key='Down')
 
 game_is_on = True
 while game_is_on:
-  screen.update()
-  time.sleep(0.1)
   cars.move_cars(player.t)
-  if cars.game_toggle == True:
-    game_is_on = False
   cars.new_car()
   player.check_finish()
   cars.check_level(player.level)
   scoreboard.update_board(player.level)
+  time.sleep(0.1)
+  screen.update()
+  if cars.game_toggle == True:
+    scoreboard.game_over()
+    game_is_on = False
+
+screen.exitonclick()
