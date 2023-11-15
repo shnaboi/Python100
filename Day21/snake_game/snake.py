@@ -56,3 +56,10 @@ class NewSnake:
     for seg in self.snake_segs[1:]:
       if self.head.distance(seg) < 10:
         return True
+
+  def reset(self):
+    self.snake_segs = []
+    self.create_snake()
+    self.head = self.snake_segs[0]
+    self.neck = self.snake_segs[1]
+    self.speed = .15
