@@ -10,7 +10,8 @@ screen.addshape(image)
 turtle.shape(image)
 
 states_t = turtle.Turtle()
-
+states_t.pu()
+states_t.hideturtle()
 
 states_data = pandas.read_csv("50_states.csv")
 # ^^^ states_data is a data frame
@@ -28,22 +29,16 @@ while states_remaining >= 1:
     break
   # Check if the guessed state is in the DataFrame
   if user_state.lower() in states_data["state"].str.lower().values:
-    print("works")
     # Place name of state on the map
     answer = states_data[states_data["state"].str.lower() == user_state.lower()]
-    print(answer)
+    # print(answer)
     answer_list = answer.iloc[0].values.tolist()
-    print(answer_list)
+    # print(answer_list)
     states_t.setpos(x=answer_list[1], y=answer_list[2])
+    states_t.write(f"{answer_list[0]}", 'center', font=('Courier', 8, 'normal'))
     # Drop the row where the state matches the user's input
     states_data = states_data[states_data["state"].str.lower() != user_state.lower()]
     states_remaining = len(states_data)
     # print(states_remaining)
     # print(states_data)
-
-
-print(states_data)
-
-
-
-# If user input is correct, put state name on the map
+    print(states_data)
