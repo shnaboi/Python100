@@ -25,3 +25,4 @@ with open('file.txt', mode='a') as file:
 
 # This is a good resource:
 # https://ioflood.com/blog/python-open-file/#:~:text=Python's%20open()%20function%20supports,reading%20and%20writing%20text%20files
+
