@@ -38,5 +38,8 @@ for (key, value) in student_dict.items():
 
 # pandas has a method called iterrows to loop through rows of a data frame
 for (index, row) in student_df.iterrows():
-  if row.student == "James":
-    print(row.score)
+  print(row)
+
+# You can create a dict from a data frame like this:
+# # Keyword Method with iterrows()
+# # {new_key:new_value for (index, row) in df.iterrows()}
