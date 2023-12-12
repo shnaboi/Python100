@@ -7,22 +7,29 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = .2
-SHORT_BREAK_MIN = .1
-LONG_BREAK_MIN = .2
-reset = False
+WORK_MIN = 25
+SHORT_BREAK_MIN = 5
+LONG_BREAK_MIN = 15
+checkmark_text = ""
 reps = 0
+timer = None
 
 
 # ---------------------------- TIMER RESET ------------------------------- #
 def reset_timer():
-  global reset
-  reset = True
+  global reps, checkmark_text
+  window.after_cancel(timer)
+  reps = 0
+  checkmark_text = ""
+  checkmarks.config(text=checkmark_text)
+  label.config(text="Timer", font=(FONT_NAME, 35, "bold"))
+  canvas.itemconfig(timer_text, text="00:00")
 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
   global reps
+  global checkmark_text
   reps += 1
 
   work_sec = int(WORK_MIN * 60)
@@ -30,15 +37,23 @@ def start_timer():
   long_break_sec = int(LONG_BREAK_MIN * 60)
   # Take break if on specified rep (1w, 2r, 3w, 4r, 5w, 6r, 7w, 8lr)
   if reps % 8 == 0:
+    label.config(text="Break time.", font=(FONT_NAME, 21, "bold"))
+    checkmark_text += '🗹'
+    checkmarks.config(text=checkmark_text)
     countdown(long_break_sec)
   elif reps % 2 == 0:
+    label.config(text="Break time.", font=(FONT_NAME, 21, "bold"))
+    checkmark_text += '🗹'
+    checkmarks.config(text=checkmark_text)
     countdown(short_break_sec)
   else:
+    label.config(text="WORK", font=(FONT_NAME, 35, "bold"))
     countdown(work_sec)
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def countdown(time_left_sec):
+  global timer
   # Get the format of time to be 00:00
   min = math.floor(time_left_sec / 60)
   sec = (time_left_sec % 60)
@@ -47,7 +62,7 @@ def countdown(time_left_sec):
   else:
     canvas.itemconfig(timer_text, text=f"{min}:{sec}")
   if time_left_sec > 0:
-    window.after(1000, countdown, time_left_sec - 1)
+    timer = window.after(1000, countdown, time_left_sec - 1)
   else:
     start_timer()
 
@@ -75,7 +90,7 @@ reset_butt = Button(text="Reset", width=5, height=2)
 reset_butt.config(command=reset_timer)
 reset_butt.grid(row=3, column=2)
 
-checkmarks = Label(text="🗹", font=(FONT_NAME, 25, "normal"), bg=YELLOW)
+checkmarks = Label(text="", font=(FONT_NAME, 25, "normal"), bg=YELLOW)
 checkmarks.grid(row=4, column=1)
 
 window.mainloop()
