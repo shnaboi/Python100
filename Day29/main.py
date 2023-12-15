@@ -16,9 +16,7 @@ def generate_pw():
 
   pw_char = pw_letters + pw_numbers + pw_symbols
   random.shuffle(pw_char)
-  password = ''
-  for char in pw_char:
-    password += char
+  password = ''.join(pw_char)
   pw_input.delete(0, 99)
   pw_input.insert(0, password)
 
