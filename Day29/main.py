@@ -1,11 +1,24 @@
 from tkinter import *
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
-# with open("data.txt", mode="w") as file:
-#   file.write("test")
+def save_pw():
+  website = website_input.get()
+  email= email_input.get()
+  password = pw_input.get()
+
+  user_ok = messagebox.askokcancel(title="Password Manager", message=f"Details entered:\n"
+                                                           f"{website}\n{email}\n{password}\n"
+                                                           f"If this is correct, click 'OK' to save.")
+  if user_ok:
+    with open("data.txt", mode="a") as file:
+      file.write(f"{website} || {email} || {password}\n")
+    website_input.delete(0, END)
+    pw_input.delete(0, END)
+    messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -39,7 +52,7 @@ pw_input.grid(row=3, column=1, sticky=W)
 pw_button = Button(text="Generate Password", bd=1)
 pw_button.grid(row=3, column=2, sticky=E+W)
 
-add_button = Button(text="Add Password to Bank", bd=1)
+add_button = Button(text="Add Password to Bank", bd=1, command=save_pw)
 add_button.grid(row=4, column=1, columnspan=2, sticky=E+W)
 
 window.mainloop()
