@@ -10,15 +10,19 @@ def save_pw():
   email= email_input.get()
   password = pw_input.get()
 
-  user_ok = messagebox.askokcancel(title="Password Manager", message=f"Details entered:\n"
-                                                           f"{website}\n{email}\n{password}\n"
-                                                           f"If this is correct, click 'OK' to save.")
-  if user_ok:
-    with open("data.txt", mode="a") as file:
-      file.write(f"{website} || {email} || {password}\n")
-    website_input.delete(0, END)
-    pw_input.delete(0, END)
-    messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
+  if len(website) == 0 or len(password) == 0:
+    messagebox.showinfo(title="Password Manager", message="Invalid website/password")
+
+  else:
+    user_ok = messagebox.askokcancel(title="Password Manager", message=f"Details entered:\n"
+                                                             f"{website}\n{email}\n{password}\n"
+                                                             f"If this is correct, click 'OK' to save.")
+    if user_ok:
+      with open("data.txt", mode="a") as file:
+        file.write(f"{website} || {email} || {password}\n")
+      website_input.delete(0, END)
+      pw_input.delete(0, END)
+      messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
