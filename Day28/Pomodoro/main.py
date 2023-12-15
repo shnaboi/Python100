@@ -97,3 +97,7 @@ window.mainloop()
 
 # for hanging
 # 20 on and 5 off (2min of 40sec rests(3x) and 3min between sets)
+
+# Input: Total Time spent
+# Input: How much of that is resting?
+# Input: How many breaks would you like?
