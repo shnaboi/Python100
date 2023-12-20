@@ -1,3 +1,4 @@
+import json
 from tkinter import *
 from tkinter import messagebox
 import random
@@ -27,6 +28,13 @@ def save_pw():
   email= email_input.get()
   password = pw_input.get()
 
+  new_data = {
+    website: {
+      "email": email,
+      "password": password,
+    }
+  }
+
   if len(website) == 0 or len(password) == 0:
     messagebox.showinfo(title="Password Manager", message="Invalid website/password")
 
@@ -35,11 +43,30 @@ def save_pw():
                                                              f"{website}\n{email}\n{password}\n"
                                                              f"If this is correct, click 'OK' to save.")
     if user_ok:
-      with open("data.txt", mode="a") as file:
-        file.write(f"{website} || {email} || {password}\n")
-      website_input.delete(0, END)
-      pw_input.delete(0, END)
-      messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
+      try:
+        with open("data.json", mode="r") as file:
+          # Read old data
+          data = json.load(file)
+      except FileNotFoundError:
+        with open("data.json", mode="w") as file:
+          #   Save updated data
+          json.dump(new_data, file, indent=2)
+      except json.decoder.JSONDecodeError:
+        with open("data.json", mode="w") as file:
+          #   Save updated data
+          json.dump(new_data, file, indent=2)
+      else:
+        # Update old data with new data
+        data.update(new_data)
+        with open("data.json", mode="w") as file:
+        #   Save updated data
+          json.dump(data, file, indent=2)
+      finally:
+        website_input.delete(0, END)
+        pw_input.delete(0, END)
+        messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
+
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
