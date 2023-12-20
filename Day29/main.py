@@ -20,6 +20,19 @@ def generate_pw():
   password = ''.join(pw_char)
   pw_input.delete(0, 99)
   pw_input.insert(0, password)
+# --------------------------- SEARCH PASSWORD ------------------------------ #
+def search_pw():
+  website = website_input.get().lower()
+  with open("data.json", mode="r") as file:
+    data = json.load(file)
+    for entry in data:
+      saved_website = entry.lower()
+      if website == saved_website:
+        # print(data.entry)
+        messagebox.showinfo(title="Password Manager",
+                            message=f"{entry}:\n"
+                                    f"Email/Username: {data[entry]['email']}\n"
+                                    f"Password: {data[entry]['password']}")
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
@@ -36,12 +49,14 @@ def save_pw():
   }
 
   if len(website) == 0 or len(password) == 0:
-    messagebox.showinfo(title="Password Manager", message="Invalid website/password")
+    messagebox.showinfo(title="Password Manager",
+                        message="Invalid website/password")
 
   else:
-    user_ok = messagebox.askokcancel(title="Password Manager", message=f"Details entered:\n"
-                                                             f"{website}\n{email}\n{password}\n"
-                                                             f"If this is correct, click 'OK' to save.")
+    user_ok = messagebox.askokcancel(title="Password Manager",
+                                     message=f"Details entered:\n"
+                                             f"{website}\n{email}\n{password}\n"
+                                             f"If this is correct, click 'OK' to save.")
     if user_ok:
       try:
         with open("data.json", mode="r") as file:
@@ -64,9 +79,8 @@ def save_pw():
       finally:
         website_input.delete(0, END)
         pw_input.delete(0, END)
-        messagebox.showinfo(title="Password Manager", message=f"{website} password saved successfully!")
-
-
+        messagebox.showinfo(title="Password Manager",
+                            message=f"{website} password saved successfully!")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -85,8 +99,10 @@ canvas.grid(row=0, column=1)
 
 website_label = Label(text="Website:")
 website_label.grid(row=1, column=0)
-website_input = Entry(width=52)
+website_input = Entry(width=33)
 website_input.grid(row=1, column=1, columnspan=2, sticky=W)
+website_search = Button(text="Search", bd=1, command=search_pw)
+website_search.grid(row=1, column=2, sticky=E+W)
 
 email_label = Label(text="Email/Username:")
 email_label.grid(row=2, column=0)
