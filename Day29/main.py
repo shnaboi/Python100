@@ -23,8 +23,13 @@ def generate_pw():
 # --------------------------- SEARCH PASSWORD ------------------------------ #
 def search_pw():
   website = website_input.get().lower()
-  with open("data.json", mode="r") as file:
-    data = json.load(file)
+  try:
+    with open("data.json", mode="r") as file:
+      data = json.load(file)
+  except FileNotFoundError:
+    messagebox.showinfo(title="Password Manager",
+                        message="No data file found.")
+  else:
     for entry in data:
       saved_website = entry.lower()
       if website == saved_website:
@@ -33,6 +38,10 @@ def search_pw():
                             message=f"{entry}:\n"
                                     f"Email/Username: {data[entry]['email']}\n"
                                     f"Password: {data[entry]['password']}")
+        break
+      messagebox.showinfo(title="Password Manager",
+                          message=f"No data found for {website}.\n"
+                                  f"Make sure your website search is spelled correctly before trying again.")
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
