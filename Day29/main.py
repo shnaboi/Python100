@@ -28,7 +28,7 @@ def search_pw():
       data = json.load(file)
   except FileNotFoundError:
     messagebox.showinfo(title="Password Manager",
-                        message="No data file found.")
+                        message="No data file found. Start by saving a password.")
   else:
     for entry in data:
       saved_website = entry.lower()
