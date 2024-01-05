@@ -39,13 +39,13 @@ class QuizUI:
 
   def true(self):
     self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
-    self.quiz.next_question()
+    self.get_question()
 
   def false(self):
     self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
-    self.quiz.next_question()
-
+    self.get_question()
   def get_question(self):
-    pass
+    self.quiz.next_question()
+    self.canvas.itemconfig(self.question_text, text=f"{self.quiz.q_text}")
 
 # poo = QuizUI()
