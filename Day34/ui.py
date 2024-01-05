@@ -1,8 +1,11 @@
 from tkinter import *
+from quiz_brain import QuizBrain
 THEME_COLOR = "#375362"
 
 class QuizUI:
-  def __init__(self):
+  def __init__(self, quiz_brain: QuizBrain):
+    self.quiz = quiz_brain
+    self.score_int = 0
     self.window = Tk()
     self.window.title("QuizFella")
     self.window.config(bg=THEME_COLOR, padx=20, pady=20)
@@ -17,19 +20,32 @@ class QuizUI:
     self.question_text = self.canvas.create_text(
       150,
       150,
-      text="This is what the hubbub is all about",
+      text=f"{self.quiz.next_question()}",
       fill=THEME_COLOR,
-      font=("Arial", 18, "italic"))
+      font=("Arial", 18, "italic"),
+      width=280)
     self.canvas.grid(row=1, column=0, columnspan=2, pady = 20)
 
     # Buttons
     y_img = PhotoImage(file="./images/true.png")
-    n_img = PhotoImage(file="./images/false.png")
-    self.button_y = Button(image=y_img, highlightthickness=0)
+    self.button_y = Button(image=y_img, highlightthickness=0, command=self.true)
     self.button_y.grid(row=2, column=0)
-    self.button_n = Button(image=n_img, highlightthickness=0)
+
+    n_img = PhotoImage(file="./images/false.png")
+    self.button_n = Button(image=n_img, highlightthickness=0, command=self.false)
     self.button_n.grid(row=2, column=1)
 
     self.window.mainloop()
 
-poo = QuizUI()
+  def true(self):
+    self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
+    self.quiz.next_question()
+
+  def false(self):
+    self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
+    self.quiz.next_question()
+
+  def get_question(self):
+    pass
+
+# poo = QuizUI()
