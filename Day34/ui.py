@@ -5,7 +5,6 @@ THEME_COLOR = "#375362"
 class QuizUI:
   def __init__(self, quiz_brain: QuizBrain):
     self.quiz = quiz_brain
-    self.score_int = 0
     self.window = Tk()
     self.window.title("QuizFella")
     self.window.config(bg=THEME_COLOR, padx=20, pady=20)
@@ -45,7 +44,12 @@ class QuizUI:
     self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
     self.get_question()
   def get_question(self):
-    self.quiz.next_question()
-    self.canvas.itemconfig(self.question_text, text=f"{self.quiz.q_text}")
+    try:
+      self.quiz.next_question()
+      self.canvas.itemconfig(self.question_text, text=f"{self.quiz.q_text}")
+    except IndexError:
+      self.canvas.itemconfig(self.question_text, text=f"Great job on the quiz!\nFinal Score: {self.quiz.score}")
+      self.button_n.config(state=DISABLED)
+      self.button_y.config(state=DISABLED)
 
 # poo = QuizUI()
