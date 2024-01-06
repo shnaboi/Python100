@@ -23,9 +23,11 @@ class QuizBrain:
         # print(self.question_list[self.question_number-1].answer)
         if boolean == self.question_list[self.question_number-1].answer:
             self.score += 1
-            return self.score
+            ans = True
+            return self.score, ans
         else:
-            return self.score
+            ans = False
+            return self.score, ans
         # for commented section to work, must pass in var user_answer
         # correct_answer = self.current_question.answer
         # if user_answer.lower() == correct_answer.lower():

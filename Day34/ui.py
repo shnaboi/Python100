@@ -37,17 +37,32 @@ class QuizUI:
     self.window.mainloop()
 
   def true(self):
-    self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
-    self.get_question()
+    score_int, ans = self.quiz.check_answer('True')
+    self.score.config(text=f"Score: {score_int}")
+    self.ui_feedback(ans)
 
   def false(self):
-    self.score.config(text=f"Score: {self.quiz.check_answer('True')}")
-    self.get_question()
-  def get_question(self):
+    score_int, ans = self.quiz.check_answer('False')
+    self.score.config(text=f"Score: {score_int}")
+    self.ui_feedback(ans)
+
+  def ui_feedback(self, bool):
+    if bool == True:
+      self.canvas.config(bg="green")
+      self.canvas.itemconfig(self.question_text, fill="white")
+    else:
+      self.canvas.config(bg="red")
+    self.window.after(1250, self.ui_next_q)
+    self.canvas.itemconfig(self.question_text, fill="white")
+
+  def ui_next_q(self):
     try:
-      self.quiz.next_question()
-      self.canvas.itemconfig(self.question_text, text=f"{self.quiz.q_text}")
+      self.canvas.itemconfig(self.question_text, text=f"{self.quiz.next_question()}")
+      self.canvas.itemconfig(self.question_text, fill=THEME_COLOR)
+      self.canvas.config(bg="white")
     except IndexError:
+      self.canvas.itemconfig(self.question_text, fill=THEME_COLOR)
+      self.canvas.config(bg="white")
       self.canvas.itemconfig(self.question_text, text=f"Great job on the quiz!\nFinal Score: {self.quiz.score}")
       self.button_n.config(state=DISABLED)
       self.button_y.config(state=DISABLED)
