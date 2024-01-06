@@ -50,16 +50,23 @@ class QuizUI:
     if bool == True:
       self.canvas.config(bg="green")
       self.canvas.itemconfig(self.question_text, fill="white")
+      self.button_n.config(state=DISABLED)
+      self.button_y.config(state=DISABLED)
+
     else:
       self.canvas.config(bg="red")
+      self.canvas.itemconfig(self.question_text, fill="white")
+      self.button_n.config(state=DISABLED)
+      self.button_y.config(state=DISABLED)
     self.window.after(1250, self.ui_next_q)
-    self.canvas.itemconfig(self.question_text, fill="white")
 
   def ui_next_q(self):
     try:
       self.canvas.itemconfig(self.question_text, text=f"{self.quiz.next_question()}")
       self.canvas.itemconfig(self.question_text, fill=THEME_COLOR)
       self.canvas.config(bg="white")
+      self.button_n.config(state=ACTIVE)
+      self.button_y.config(state=ACTIVE)
     except IndexError:
       self.canvas.itemconfig(self.question_text, fill=THEME_COLOR)
       self.canvas.config(bg="white")
