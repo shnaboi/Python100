@@ -66,5 +66,3 @@ class QuizUI:
       self.canvas.itemconfig(self.question_text, text=f"Great job on the quiz!\nFinal Score: {self.quiz.score}")
       self.button_n.config(state=DISABLED)
       self.button_y.config(state=DISABLED)
-
-# poo = QuizUI()

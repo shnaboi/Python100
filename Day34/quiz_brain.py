@@ -28,13 +28,3 @@ class QuizBrain:
         else:
             ans = False
             return self.score, ans
-        # for commented section to work, must pass in var user_answer
-        # correct_answer = self.current_question.answer
-        # if user_answer.lower() == correct_answer.lower():
-        #     self.score += 1
-        #     print("You got it right!")
-        # else:
-        #     print("That's wrong.")
-        #
-        # print(f"Your current score is: {self.score}/{self.question_number}")
-        # print("\n")
