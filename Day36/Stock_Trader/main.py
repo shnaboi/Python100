@@ -18,6 +18,12 @@ AV_PARAMS = {
   "apikey": AV_API_KEY
 }
 
+NEWS_PARAMS = {
+  "q": "Tesla",
+  # "country": "us",
+  "apiKey": NEWS_API_KEY
+}
+
 stocks_response = requests.get(url='https://www.alphavantage.co/query?',
                                params= AV_PARAMS)
 stocks_response.raise_for_status()
@@ -31,14 +37,32 @@ def check_stocks():
   if day_one_close > day_two_close:
     if day_one_close - day_two_close > five_perc:
       print('Price went up more than 5%')
-  else:
+      get_news()
+  elif day_two_close > day_one_close:
     if (day_two_close - day_one_close) > five_perc:
       print('Price went down more than 5%')
+      get_news()
+  else:
+    print("Not enough significant change in stocks")
 
-check_stocks()
+# check_stocks()
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
+
+news_response = requests.get(url='https://newsapi.org/v2/top-headlines?',
+                             params=NEWS_PARAMS)
+news_response.raise_for_status()
+news_data = news_response.json()
+# print(news_data["articles"][1]["url"])
+
+def get_news():
+  url_1 = news_data["articles"][0]["url"]
+  url_2 = news_data["articles"][1]["url"]
+  url_3 = news_data["articles"][2]["url"]
+  print(f"{url_1}\n{url_2}\n{url_3}")
+
+get_news()
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME.
