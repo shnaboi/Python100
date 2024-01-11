@@ -1,4 +1,5 @@
 import requests
+import os
 from datetime import *
 
 now = date.today()
@@ -9,8 +10,8 @@ day_two = (now - timedelta(days=2)).strftime("%Y-%m-%d")
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
-AV_API_KEY = "PVQQTRI0RYD18BO5"
-NEWS_API_KEY = "f3a399bca72a494bbee4f62b6ae785f9"
+AV_API_KEY = os.environ.get("AV_API_KEY")
+NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 
 AV_PARAMS = {
   "function": "TIME_SERIES_DAILY",
