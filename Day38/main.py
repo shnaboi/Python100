@@ -4,18 +4,17 @@ import datetime as dt
 
 APP_ID = os.environ.get("NUTRITIONIX_APP_ID")
 API_KEY = os.environ.get("NUTRITIONIX_API_KEY")
+NUTRITIONIX_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
 HEADER = {
   "x-app-id": APP_ID,
   "x-app-key": API_KEY
 }
+
+SHEETY_KEY = os.environ.get("sheety_auth")
+
 now = dt.datetime.now()
 today = now.strftime("%m/%d/%Y")
 now_time = now.strftime("%H:%M:%S")
-# print(today)
-#
-# print(HEADER)
-
-NUTRITIONIX_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
 
 exercise_params = {
   "query": input("Describe your workout:\n"),
@@ -29,6 +28,10 @@ nutritionix_data = response.json()
 
 sheety_endpoint = "https://api.sheety.co/82235a205924c90499f09a2066926078/myWorkoutsApp/workouts"
 
+sheety_header = {
+  "Authorization": SHEETY_KEY
+}
+
 sheety_data = {
   "workout": {
     "date": today,
@@ -41,6 +44,6 @@ sheety_data = {
 
 print(sheety_data)
 
-response_b = requests.post(url=sheety_endpoint, json=sheety_data)
+response_b = requests.post(url=sheety_endpoint, json=sheety_data, headers=sheety_header)
 response_b.raise_for_status()
 print(response_b.text)
