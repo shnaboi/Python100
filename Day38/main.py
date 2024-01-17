@@ -2,15 +2,19 @@ import requests
 import os
 import datetime as dt
 
-APP_ID = os.environ.get("NUTRITIONIX_APP_ID")
-API_KEY = os.environ.get("NUTRITIONIX_API_KEY")
+NUTRITIONIX_APP_ID = os.environ.get("NUTRITIONIX_APP_ID")
+NUTRITIONIX_API_KEY = os.environ.get("NUTRITIONIX_API_KEY")
 NUTRITIONIX_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
-HEADER = {
-  "x-app-id": APP_ID,
-  "x-app-key": API_KEY
+NUTRITIONIX_HEADER = {
+  "x-app-id": NUTRITIONIX_APP_ID,
+  "x-app-key": NUTRITIONIX_API_KEY
 }
 
 SHEETY_KEY = os.environ.get("sheety_auth")
+SHEETY_ENDPOINT = "https://api.sheety.co/82235a205924c90499f09a2066926078/myWorkoutsApp/workouts"
+SHEETY_HEADER = {
+  "Authorization": SHEETY_KEY
+}
 
 now = dt.datetime.now()
 today = now.strftime("%m/%d/%Y")
@@ -21,16 +25,10 @@ exercise_params = {
   "age": int(input("What is your age?\n"))
 }
 
-response = requests.post(url=NUTRITIONIX_ENDPOINT, json=exercise_params, headers=HEADER)
-response.raise_for_status()
+response_a = requests.post(url=NUTRITIONIX_ENDPOINT, json=exercise_params, headers=NUTRITIONIX_HEADER)
+response_a.raise_for_status()
 # print(response.json())
-nutritionix_data = response.json()
-
-sheety_endpoint = "https://api.sheety.co/82235a205924c90499f09a2066926078/myWorkoutsApp/workouts"
-
-sheety_header = {
-  "Authorization": SHEETY_KEY
-}
+nutritionix_data = response_a.json()
 
 sheety_data = {
   "workout": {
@@ -42,8 +40,7 @@ sheety_data = {
   }
 }
 
-print(sheety_data)
-
-response_b = requests.post(url=sheety_endpoint, json=sheety_data, headers=sheety_header)
+# print(sheety_data)
+response_b = requests.post(url=SHEETY_ENDPOINT, json=sheety_data, headers=SHEETY_HEADER)
 response_b.raise_for_status()
 print(response_b.text)
