@@ -6,16 +6,7 @@ import os
 import datetime as dt
 from pprint import pprint
 from flight_search import FlightSearch
-
-"""
-Google Sheet Data Management - https://sheety.co/
-
-Kiwi Partners Flight Search API (Free Signup, Credit Card not required) - https://partners.kiwi.com/
-
-Tequila Flight Search API Documentation - https://tequila.kiwi.com/portal/docs/tequila_api
-
-Twilio SMS API - https://www.twilio.com/docs/sms
-"""
+from data_manager import DataManager
 
 """
 Searching for Flights
@@ -25,80 +16,78 @@ We're also looking for round trips that return between 7 and 28 days in length.
 The currency of the price we get back should be in USD.
 """
 
-SHEETY_ENDPOINT = "https://api.sheety.co/82235a205924c90499f09a2066926078/flightDealsApp/flights"
+# sheety_data = {
+#   "flights": [
+#     {
+#       "city": "Paris",
+#       "iataCode": "",
+#       "lowestPrice": 54,
+#       "id": 2
+#     },
+#     {
+#       "city": "Berlin",
+#       "iataCode": "",
+#       "lowestPrice": 42,
+#       "id": 3
+#     },
+#     {
+#       "city": "Tokyo",
+#       "iataCode": "",
+#       "lowestPrice": 485,
+#       "id": 4
+#     },
+#     {
+#       "city": "Sydney",
+#       "iataCode": "",
+#       "lowestPrice": 551,
+#       "id": 5
+#     },
+#     {
+#       "city": "Istanbul",
+#       "iataCode": "",
+#       "lowestPrice": 95,
+#       "id": 6
+#     },
+#     {
+#       "city": "Kuala Lumpur",
+#       "iataCode": "",
+#       "lowestPrice": 414,
+#       "id": 7
+#     },
+#     {
+#       "city": "New York",
+#       "iataCode": "",
+#       "lowestPrice": 240,
+#       "id": 8
+#     },
+#     {
+#       "city": "San Francisco",
+#       "iataCode": "",
+#       "lowestPrice": 260,
+#       "id": 9
+#     },
+#     {
+#       "city": "Cape Town",
+#       "iataCode": "",
+#       "lowestPrice": 378,
+#       "id": 10
+#     }
+#   ]
+# }
 
-# sheety_response = requests.get(url=SHEETY_ENDPOINT)
-# print(sheety_response.text)
-# sheety_data = sheety_response.json()
-
-sheety_data = {
-  "flights": [
-    {
-      "city": "Paris",
-      "iataCode": "",
-      "lowestPrice": 54,
-      "id": 2
-    },
-    {
-      "city": "Berlin",
-      "iataCode": "",
-      "lowestPrice": 42,
-      "id": 3
-    },
-    {
-      "city": "Tokyo",
-      "iataCode": "",
-      "lowestPrice": 485,
-      "id": 4
-    },
-    {
-      "city": "Sydney",
-      "iataCode": "",
-      "lowestPrice": 551,
-      "id": 5
-    },
-    {
-      "city": "Istanbul",
-      "iataCode": "",
-      "lowestPrice": 95,
-      "id": 6
-    },
-    {
-      "city": "Kuala Lumpur",
-      "iataCode": "",
-      "lowestPrice": 414,
-      "id": 7
-    },
-    {
-      "city": "New York",
-      "iataCode": "",
-      "lowestPrice": 240,
-      "id": 8
-    },
-    {
-      "city": "San Francisco",
-      "iataCode": "",
-      "lowestPrice": 260,
-      "id": 9
-    },
-    {
-      "city": "Cape Town",
-      "iataCode": "",
-      "lowestPrice": 378,
-      "id": 10
-    }
-  ]
-}
-# def flight_search(sheety_data):
-#   for flight in sheety_data["flights"]:
-#     if flight["iataCode"] == "":
-#       flight["iataCode"] = "testing"
-#       #use flight_search Obj to search for the iataCode and update sheety_data
-#       #at the end of for loop the sheety_data should be posted to google sheet
-#   print(sheety_data)
+data_man_obj = DataManager()
+sheety_data = data_man_obj.get_travel_data()
+# ^^^ get sheety data
+print(f"sheety_data = {sheety_data}")
 
 flight_search_obj = FlightSearch()
-flight_search_obj.flight_search(sheety_data)
+for flight in sheety_data:
+  if flight["iataCode"] == "testing":
+    flight["iataCode"] = flight_search_obj.get_iata_code(flight["city"])
+
+data_man_obj.travel_data = sheety_data
+data_man_obj.update_iata_code()
+
 # TEQUILA_API_KEY = os.environ.get("TEQUILA_API_KEY")
 # TEQUILA_ENDPOINT = "https://api.tequila.kiwi.com/v2/search"
 # TEQUILA_ID = "shnaboishnaflightprices"
