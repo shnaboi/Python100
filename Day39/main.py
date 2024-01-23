@@ -28,10 +28,10 @@ The currency of the price we get back should be in USD.
 SHEETY_ENDPOINT = "https://api.sheety.co/82235a205924c90499f09a2066926078/flightDealsApp/flights"
 
 # sheety_response = requests.get(url=SHEETY_ENDPOINT)
-# # print(sheety_response.text)
+# print(sheety_response.text)
 # sheety_data = sheety_response.json()
-sheety_data = {
 
+sheety_data = {
   "flights": [
     {
       "city": "Paris",
