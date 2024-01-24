@@ -76,7 +76,7 @@ sheety_data = [
 # data_man_obj = DataManager()
 # sheety_data = data_man_obj.get_travel_data()
 # ^^^ get sheety data
-print(f"sheety_data = {sheety_data}")
+# print(f"sheety_data = {sheety_data}")
 
 flight_search_obj = FlightSearch()
 for flight in sheety_data:
@@ -86,4 +86,8 @@ for flight in sheety_data:
 # data_man_obj.travel_data = sheety_data
 # data_man_obj.update_iata_code()
 
-print(sheety_data)
+# print(sheety_data)
+
+for flight in sheety_data:
+  # search for cheapest flights
+  flight_search_obj.search_flights(flight["iataCode"])
