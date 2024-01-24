@@ -78,16 +78,25 @@ sheety_data = [
 # ^^^ get sheety data
 # print(f"sheety_data = {sheety_data}")
 
+# Get IATA Code using FlightSearch()
 flight_search_obj = FlightSearch()
 for flight in sheety_data:
   if flight["iataCode"] == "":
     flight["iataCode"] = flight_search_obj.get_iata_code(flight["city"])
 
+# Update Sheety
 # data_man_obj.travel_data = sheety_data
 # data_man_obj.update_iata_code()
 
 # print(sheety_data)
 
+# Search for flights to each city
+from flight_data import FlightData
+flight_data_obj = FlightData()
 for flight in sheety_data:
-  # search for cheapest flights
-  flight_search_obj.search_flights(flight["iataCode"])
+  city_name = flight["city"]
+  setattr(flight_data_obj, city_name, flight_search_obj.search_flights(flight["iataCode"]))
+  flight_data_obj.organize_data(getattr(flight_data_obj, city_name))
+
+print(flight_data_obj.Paris_price)
+

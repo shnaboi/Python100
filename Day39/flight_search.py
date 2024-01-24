@@ -30,7 +30,7 @@ class FlightSearch:
       "date_from": "10/05/2024",
       "date_to": "24/11/2024",
       "curr": "USD",
-      "limit": 5
+      "limit": 3
     }
     response = requests.get(url=TEQUILA_SEARCH_ENDPOINT, params=search_json, headers=TEQUILA_HEADER)
     response.raise_for_status()
@@ -38,6 +38,7 @@ class FlightSearch:
     # print(f"{destination} data = {data}")
     fare = data['data'][0]['fare']['adults']
     print(f"{destination} fare = {fare}")
+    return data
 
 # search_params = {
 #   "fly_from": "(city code)",
