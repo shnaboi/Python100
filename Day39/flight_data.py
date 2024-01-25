@@ -4,8 +4,14 @@ class FlightData:
     pass
 
   def organize_data(self, data):
-    city_name = data['data'][0]['cityTo']
-    setattr(self, f"{city_name}_price", data['data'][0]['price'])
-
-
-  # create data for price, departure airport code, departure city
+    city_name = data[0]['cityTo'].lower()
+    organized_data = {
+      "price": data[0]['price'],
+      "origin_city": data[0]['cityFrom'],
+      "origin_airport": data[0]['flyFrom'],
+      "dest_city": data[0]['cityTo'],
+      "dest_airport": data[0]['flyTo'],
+      "depart_date": data[0]['route'][0]['local_departure'],
+      "return_date": data[0]['route'][-1]['local_arrival']
+    }
+    setattr(self, city_name, organized_data)

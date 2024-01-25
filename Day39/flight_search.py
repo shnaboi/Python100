@@ -29,6 +29,8 @@ class FlightSearch:
       "fly_to": destination,
       "date_from": "10/05/2024",
       "date_to": "24/11/2024",
+      "return_from": "15/05/2024",
+      "return_to": "26/11/2024",
       "curr": "USD",
       "limit": 3
     }
@@ -36,9 +38,9 @@ class FlightSearch:
     response.raise_for_status()
     data = response.json()
     # print(f"{destination} data = {data}")
-    fare = data['data'][0]['fare']['adults']
-    print(f"{destination} fare = {fare}")
-    return data
+    # fare = data['data'][0]['fare']['adults']
+    # print(data['data'])
+    return data['data']
 
 # search_params = {
 #   "fly_from": "(city code)",

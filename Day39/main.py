@@ -94,9 +94,8 @@ for flight in sheety_data:
 from flight_data import FlightData
 flight_data_obj = FlightData()
 for flight in sheety_data:
-  city_name = flight["city"]
-  setattr(flight_data_obj, city_name, flight_search_obj.search_flights(flight["iataCode"]))
-  flight_data_obj.organize_data(getattr(flight_data_obj, city_name))
+  data_from_search = flight_search_obj.search_flights(flight["iataCode"])
+  flight_data_obj.organize_data(data_from_search)
 
-print(flight_data_obj.Paris_price)
+print(flight_data_obj.paris)
 
