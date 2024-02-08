@@ -2,6 +2,17 @@ from bs4 import BeautifulSoup
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import os
+
+SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+SPOTIFY_URI_RETURN = os.environ.get('SPOTIFY_URI_RETURN')
+
+SPOTIFY_PRINTED_TOKEN = os.environ.get('SPOTIFY_PRINTED_TOKEN')
+SPOTIFY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
+USER_ID = 'beefyboy10'
+
+print(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_URI_RETURN, SPOTIFY_PRINTED_TOKEN, SPOTIFY_REDIRECT_URI)
 
 # Set up OAuth handler
 sp_oauth = SpotifyOAuth(client_id=SPOTIFY_CLIENT_ID,
@@ -15,25 +26,22 @@ token_info = sp_oauth.get_access_token(as_dict=False)
 # Create a Spotipy instance using the obtained token
 sp = spotipy.Spotify(auth=token_info)
 
-# Example request: Fetch the current user's playlists
+# Fetch the current user's playlists
 playlists = sp.current_user_playlists()
 
-playlist_name = 'Generated Playlist'
+# Create Playlist
+playlist_name = 'PYTEST'
 
-playlist = sp.user_playlist_create(user=user_id, name=playlist_name, public=False)
+playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
 
 playlist_id = playlist['id']
 
-print(playlist_id, f"token = {token_info}")
+print(playlists)
 
 response = requests.get("https://www.billboard.com/charts/hot-100/2001-05-10/")
 website = response.text
 
 soup = BeautifulSoup(website, "html.parser")
-# print(soup)
-
-# song_names = soup.find_all(name="h3", class_="c-title")
-# print(song_names)
 
 song_names = soup.select("div div ul li ul li h3")
 artist_names = soup.find_all(name="span", class_="a-no-trucate")
