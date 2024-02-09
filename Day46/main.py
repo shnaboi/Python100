@@ -12,8 +12,6 @@ SPOTIFY_PRINTED_TOKEN = os.environ.get('SPOTIFY_PRINTED_TOKEN')
 SPOTIFY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
 USER_ID = 'beefyboy10'
 
-print(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_URI_RETURN, SPOTIFY_PRINTED_TOKEN, SPOTIFY_REDIRECT_URI)
-
 # Set up OAuth handler
 sp_oauth = SpotifyOAuth(client_id=SPOTIFY_CLIENT_ID,
                         client_secret=SPOTIFY_CLIENT_SECRET,
@@ -26,17 +24,41 @@ token_info = sp_oauth.get_access_token(as_dict=False)
 # Create a Spotipy instance using the obtained token
 sp = spotipy.Spotify(auth=token_info)
 
-# Fetch the current user's playlists
-playlists = sp.current_user_playlists()
-
 # Create Playlist
-playlist_name = 'PYTEST'
+# playlist_name = 'PYTEST'
+#
+# playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
+#
+# playlist_id = playlist['id']
 
-playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
+# def find_track(song):
+#   song_title = song['song']
+#   song_artist = song['artist']
+#   result = sp.search(q='One Step Closer', limit=1, type="track")
+#   artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
+#   artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+#   track_uri = result['tracks']['items'][0]['uri']
+#   print(artist_uri, track_uri)
 
-playlist_id = playlist['id']
+# Search for song
+result = sp.search(q='One Step Closer', limit=1, type="track")
+artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
+artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+track_uri = result['tracks']['items'][0]['uri']
+print(artist_uri, track_uri)
 
-print(playlists)
+# add items to playlist
+# playlist_add_items(playlist_id, items, position=None)
+# items - a list of track/episode URIs or URLs
+
+# playlist_change_details(playlist_id, name=None, public=None, collaborative=None, description=None)
+# playlist_id - the id of the playlist
+# name - optional name of the playlist
+# public - optional is the playlist public
+# collaborative - optional is the playlist collaborative
+# description - optional description of the playlist
+
+# user_playlist_add_tracks(user, playlist_id, tracks, position=None)
 
 response = requests.get("https://www.billboard.com/charts/hot-100/2001-05-10/")
 website = response.text
