@@ -3,6 +3,7 @@ import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import os
+import re
 
 SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
@@ -31,28 +32,6 @@ sp = spotipy.Spotify(auth=token_info)
 #
 # playlist_id = playlist['id']
 
-def find_track(song):
-  song_title = song['song']
-  song_artist = song['artist']
-  query = 'track:"All For You" artist:"Janet Jackson"'
-  result = sp.search(q=query, limit=1, type="track", market='ES')
-  artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
-  artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-  track_uri = result['tracks']['items'][0]['uri']
-  print(result, f"\n{artist_name}")
-  return artist_uri, track_uri
-
-# Search for song
-# result = sp.search(q='One Step Closer', limit=1, type="track")
-# artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
-# artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-# track_uri = result['tracks']['items'][0]['uri']
-# print(artist_uri, track_uri)
-
-# add items to playlist
-# playlist_add_items(playlist_id, items, position=None)
-# items - a list of track/episode URIs or URLs
-
 # playlist_change_details(playlist_id, name=None, public=None, collaborative=None, description=None)
 # playlist_id - the id of the playlist
 # name - optional name of the playlist
@@ -75,8 +54,14 @@ for x in range(len(song_names)):
   song_raw = song_names[x].get_text()
   artist_raw = artist_names[x].get_text()
 
-  song = song_raw.replace('\n', '').replace('\t', '')
-  artist = artist_raw.replace('\n', '').replace('\t', '')
+  song = (song_raw.replace('\n', '').replace('\t', '').replace("'", "")).replace('"', '').lower()
+  artist = artist_raw.replace('\n', '').replace('\t', '').replace("'", "").replace('"', '').lower()
+
+  # catch if artist name contains extra characters which make the search invalid
+  if "featuring" in artist:
+    artist = artist.split("featuring")[0].strip()
+  if "," in artist:
+    artist = artist.split(",")[0].strip()
 
   new_data = {f"{x+1}": {
     "song": song,
@@ -84,6 +69,27 @@ for x in range(len(song_names)):
   }}
   top_100_dict.update(new_data)
 
-# print(top_100_dict['1'])
+# search for song
+def find_track(song):
+  song_title = song['song']
+  song_artist = song['artist']
+  query = f'track:"{song_title}" artist:"{song_artist}"'
+  result = sp.search(q=query, limit=1, type="track", market='ES')
+  print(f"results: {result}")
+  # artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
+  artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+  track_uri = result['tracks']['items'][0]['uri']
+  return artist_uri, track_uri
 
-print(find_track(top_100_dict['1']))
+for hit in top_100_dict:
+  print(top_100_dict[hit])
+  hit_data = top_100_dict[hit]
+  artist_uri, track_uri = find_track(hit_data)
+  # sp.playlist_add_items(playlist_id, track_uri, position=None)
+  print(track_uri)
+
+# add items to playlist
+# playlist_add_items(playlist_id, items, position=None)
+# items - a list of track/episode URIs or URLs
+
+# print(find_track(top_100_dict['1']))
