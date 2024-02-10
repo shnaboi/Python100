@@ -31,21 +31,23 @@ sp = spotipy.Spotify(auth=token_info)
 #
 # playlist_id = playlist['id']
 
-# def find_track(song):
-#   song_title = song['song']
-#   song_artist = song['artist']
-#   result = sp.search(q='One Step Closer', limit=1, type="track")
-#   artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
-#   artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-#   track_uri = result['tracks']['items'][0]['uri']
-#   print(artist_uri, track_uri)
+def find_track(song):
+  song_title = song['song']
+  song_artist = song['artist']
+  query = 'track:"All For You" artist:"Janet Jackson"'
+  result = sp.search(q=query, limit=1, type="track", market='ES')
+  artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
+  artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+  track_uri = result['tracks']['items'][0]['uri']
+  print(result, f"\n{artist_name}")
+  return artist_uri, track_uri
 
 # Search for song
-result = sp.search(q='One Step Closer', limit=1, type="track")
-artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
-artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-track_uri = result['tracks']['items'][0]['uri']
-print(artist_uri, track_uri)
+# result = sp.search(q='One Step Closer', limit=1, type="track")
+# artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
+# artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+# track_uri = result['tracks']['items'][0]['uri']
+# print(artist_uri, track_uri)
 
 # add items to playlist
 # playlist_add_items(playlist_id, items, position=None)
@@ -82,4 +84,6 @@ for x in range(len(song_names)):
   }}
   top_100_dict.update(new_data)
 
-print(top_100_dict)
+# print(top_100_dict['1'])
+
+print(find_track(top_100_dict['1']))
