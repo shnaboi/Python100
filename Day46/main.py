@@ -25,12 +25,13 @@ token_info = sp_oauth.get_access_token(as_dict=False)
 sp = spotipy.Spotify(auth=token_info)
 
 # Create Playlist
-playlist_name = "Cal's Bday Top100 Hits"
+playlist_name = input("What would you like to name the playlist?\n")
+date = input("Which date would you like to make playlist of?\nFormat: (YYYY-MM-DD)\n")
 playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
 playlist_id = playlist['id']
 
 # Get top 100 chart
-response = requests.get("https://www.billboard.com/charts/hot-100/1995-09-30/")
+response = requests.get(f"https://www.billboard.com/charts/hot-100/{date}/")
 website = response.text
 
 soup = BeautifulSoup(website, "html.parser")
