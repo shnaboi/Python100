@@ -32,54 +32,56 @@ playlist_id = playlist['id']
 
 # Get top 100 chart
 response = requests.get(f"https://www.billboard.com/charts/hot-100/{date}/")
-website = response.text
+if response.status_code == 404:
+  print("404 error, date not accepted")
+else:
+  website = response.text
+  soup = BeautifulSoup(website, "html.parser")
 
-soup = BeautifulSoup(website, "html.parser")
+  # scrape site for song info
+  song_names = soup.select("div div ul li ul li h3")
+  artist_names = soup.find_all(name="span", class_="a-no-trucate")
 
-# scrape site for song info
-song_names = soup.select("div div ul li ul li h3")
-artist_names = soup.find_all(name="span", class_="a-no-trucate")
+  # scrub song info for use with spotify search api
+  top_100_dict = {}
+  for x in range(len(song_names)):
+    song_raw = song_names[x].get_text()
+    artist_raw = artist_names[x].get_text()
 
-# scrub song info for use with spotify search api
-top_100_dict = {}
-for x in range(len(song_names)):
-  song_raw = song_names[x].get_text()
-  artist_raw = artist_names[x].get_text()
+    song = (song_raw.replace('\n', '').replace('\t', '').replace("'", "")).replace('"', '').lower()
+    artist = artist_raw.replace('\n', '').replace('\t', '').replace("'", "").replace('"', '').lower()
 
-  song = (song_raw.replace('\n', '').replace('\t', '').replace("'", "")).replace('"', '').lower()
-  artist = artist_raw.replace('\n', '').replace('\t', '').replace("'", "").replace('"', '').lower()
+    # catch if artist name contains extra characters which make the search invalid
+    if "featuring" in artist:
+      artist = artist.split("featuring")[0].strip()
+    if "," in artist:
+      artist = artist.split(",")[0].strip()
 
-  # catch if artist name contains extra characters which make the search invalid
-  if "featuring" in artist:
-    artist = artist.split("featuring")[0].strip()
-  if "," in artist:
-    artist = artist.split(",")[0].strip()
+    new_data = {f"{x+1}": {
+      "song": song,
+      "artist": artist
+    }}
+    top_100_dict.update(new_data)
 
-  new_data = {f"{x+1}": {
-    "song": song,
-    "artist": artist
-  }}
-  top_100_dict.update(new_data)
+  # search for song
+  def find_and_add_track(song):
+    song_title = song['song']
+    song_artist = song['artist']
+    query = f'track:"{song_title}" artist:"{song_artist}"'
+    result = sp.search(q=query, limit=1, type="track", market='ES')
+    print(f"results: {result}")
+    try:
+      artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+      track_uri = [result['tracks']['items'][0]['uri']]
+    except IndexError:
+      return
 
-# search for song
-def find_and_add_track(song):
-  song_title = song['song']
-  song_artist = song['artist']
-  query = f'track:"{song_title}" artist:"{song_artist}"'
-  result = sp.search(q=query, limit=1, type="track", market='ES')
-  print(f"results: {result}")
-  try:
-    artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-    track_uri = [result['tracks']['items'][0]['uri']]
-  except IndexError:
-    return
+    add_song_to_playlist(track_uri)
 
-  add_song_to_playlist(track_uri)
+  def add_song_to_playlist(uri):
+    sp.playlist_add_items(playlist_id, uri)
 
-def add_song_to_playlist(uri):
-  sp.playlist_add_items(playlist_id, uri)
-
-for hit in top_100_dict:
-  print(top_100_dict[hit])
-  hit_data = top_100_dict[hit]
-  find_and_add_track(hit_data)
+  for hit in top_100_dict:
+    print(top_100_dict[hit])
+    hit_data = top_100_dict[hit]
+    find_and_add_track(hit_data)
