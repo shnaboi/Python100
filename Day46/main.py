@@ -12,6 +12,46 @@ SPOTIFY_PRINTED_TOKEN = os.environ.get('SPOTIFY_PRINTED_TOKEN')
 SPOTIFY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
 USER_ID = 'beefyboy10'
 
+def organize_song_data():
+  for x in range(len(song_names)):
+    song_raw = song_names[x].get_text()
+    artist_raw = artist_names[x].get_text()
+
+    song = (song_raw.replace('\n', '').replace('\t', '').replace("'", "")).replace('"', '').lower()
+    artist = artist_raw.replace('\n', '').replace('\t', '').replace("'", "").replace('"', '').lower()
+
+    # catch if artist name contains extra characters which make the search invalid
+    if "featuring" in artist:
+      artist = artist.split("featuring")[0].strip()
+    if "," in artist:
+      artist = artist.split(",")[0].strip()
+
+    new_data = {f"{x + 1}": {
+      "song": song,
+      "artist": artist
+    }}
+    top_100_dict.update(new_data)
+
+
+# search for song
+def find_and_add_track(song):
+  song_title = song['song']
+  song_artist = song['artist']
+  query = f'track:"{song_title}" artist:"{song_artist}"'
+  result = sp.search(q=query, limit=1, type="track", market='ES')
+  print(f"results: {result}")
+  try:
+    artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+    track_uri = [result['tracks']['items'][0]['uri']]
+  except IndexError:
+    return
+
+  add_song_to_playlist(track_uri)
+
+
+def add_song_to_playlist(uri):
+  sp.playlist_add_items(playlist_id, uri)
+
 # Set up OAuth handler
 sp_oauth = SpotifyOAuth(client_id=SPOTIFY_CLIENT_ID,
                         client_secret=SPOTIFY_CLIENT_SECRET,
@@ -44,42 +84,7 @@ else:
 
   # scrub song info for use with spotify search api
   top_100_dict = {}
-  for x in range(len(song_names)):
-    song_raw = song_names[x].get_text()
-    artist_raw = artist_names[x].get_text()
-
-    song = (song_raw.replace('\n', '').replace('\t', '').replace("'", "")).replace('"', '').lower()
-    artist = artist_raw.replace('\n', '').replace('\t', '').replace("'", "").replace('"', '').lower()
-
-    # catch if artist name contains extra characters which make the search invalid
-    if "featuring" in artist:
-      artist = artist.split("featuring")[0].strip()
-    if "," in artist:
-      artist = artist.split(",")[0].strip()
-
-    new_data = {f"{x+1}": {
-      "song": song,
-      "artist": artist
-    }}
-    top_100_dict.update(new_data)
-
-  # search for song
-  def find_and_add_track(song):
-    song_title = song['song']
-    song_artist = song['artist']
-    query = f'track:"{song_title}" artist:"{song_artist}"'
-    result = sp.search(q=query, limit=1, type="track", market='ES')
-    print(f"results: {result}")
-    try:
-      artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-      track_uri = [result['tracks']['items'][0]['uri']]
-    except IndexError:
-      return
-
-    add_song_to_playlist(track_uri)
-
-  def add_song_to_playlist(uri):
-    sp.playlist_add_items(playlist_id, uri)
+  organize_song_data()
 
   for hit in top_100_dict:
     print(top_100_dict[hit])
