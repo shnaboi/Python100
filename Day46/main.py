@@ -3,7 +3,6 @@ import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import os
-import re
 
 SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
@@ -77,8 +76,11 @@ def find_track(song):
   result = sp.search(q=query, limit=1, type="track", market='ES')
   print(f"results: {result}")
   # artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
-  artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-  track_uri = result['tracks']['items'][0]['uri']
+  try:
+    artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
+    track_uri = result['tracks']['items'][0]['uri']
+  except IndexError:
+    return 0, 0
   return artist_uri, track_uri
 
 for hit in top_100_dict:
