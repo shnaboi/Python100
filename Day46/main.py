@@ -3,6 +3,7 @@ import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import os
+import jwt
 
 SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
@@ -16,20 +17,28 @@ USER_ID = 'beefyboy10'
 sp_oauth = SpotifyOAuth(client_id=SPOTIFY_CLIENT_ID,
                         client_secret=SPOTIFY_CLIENT_SECRET,
                         redirect_uri=SPOTIFY_REDIRECT_URI,
-                        scope='playlist-modify-private playlist-modify-public')
+                        scope='playlist-modify-public')
+
+# token_info = SPOTIFY_URI_RETURN
 
 # Get the token
 token_info = sp_oauth.get_access_token(as_dict=False)
+# print(token_info)
+# # Decode the access token
+# decoded_token = jwt.decode(token_info, algorithms=['HS256'], verify=False)
+#
+# # Print the decoded token information
+# print("decode: ", decoded_token)
 
 # Create a Spotipy instance using the obtained token
 sp = spotipy.Spotify(auth=token_info)
 
 # Create Playlist
-# playlist_name = 'PYTEST'
-#
-# playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
-#
-# playlist_id = playlist['id']
+playlist_name = 'PYTEST'
+
+playlist = sp.user_playlist_create(user=USER_ID, name=playlist_name, public=False)
+
+playlist_id = playlist['id']
 
 # playlist_change_details(playlist_id, name=None, public=None, collaborative=None, description=None)
 # playlist_id - the id of the playlist
@@ -69,7 +78,7 @@ for x in range(len(song_names)):
   top_100_dict.update(new_data)
 
 # search for song
-def find_track(song):
+def find_and_add_track(song):
   song_title = song['song']
   song_artist = song['artist']
   query = f'track:"{song_title}" artist:"{song_artist}"'
@@ -78,17 +87,21 @@ def find_track(song):
   # artist_name = result['tracks']['items'][0]['album']['artists'][0]['name']
   try:
     artist_uri = result['tracks']['items'][0]['album']['artists'][0]['uri']
-    track_uri = result['tracks']['items'][0]['uri']
+    track_uri = [result['tracks']['items'][0]['uri']]
+    print(track_uri)
   except IndexError:
-    return 0, 0
-  return artist_uri, track_uri
+    return
+
+  add_song_to_playlist(track_uri)
+  return
+
+def add_song_to_playlist(uri):
+  sp.playlist_add_items(playlist_id, uri)
 
 for hit in top_100_dict:
   print(top_100_dict[hit])
   hit_data = top_100_dict[hit]
-  artist_uri, track_uri = find_track(hit_data)
-  # sp.playlist_add_items(playlist_id, track_uri, position=None)
-  print(track_uri)
+  find_and_add_track(hit_data)
 
 # add items to playlist
 # playlist_add_items(playlist_id, items, position=None)
