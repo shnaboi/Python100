@@ -4,26 +4,34 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
-amazon_product = "https://www.amazon.com/Yonex-EZONE-Night-Tennis-Racquet/dp/B0CS8H2JK5/ref=sr_1_4?crid=3464C3IPN9Y8E&dib=eyJ2IjoiMSJ9.MU1l-1BxejHTLYnrshhp3iOu7NQ1dk0KsQijbfTzDpWz2otfjLwilTy_xQM6Va0XcrOktlZmPZIyTECz4fhCwDf-xGkIvZxhlMuZYH5Ee4YcZCZo7WMFnr2b36z0spPobKE3rOkN_88bcODThuckk7pYLfTFEGMhET-nyL4TwJAXjQC8QaOcsH6r95s8l1wHsSlgjXL_4wXrGM3vJCw9rUfb9mip6r8TZxkysknDxnDBrJd1k3FKfo6sH5LJnugJ-R6aM6MVSyYgyrQPHcSWXxSEwTRM5ASUEAWoM0A5mCw.TOBxZ7HwuyfJT9tR8omT622VKA2c-icM7uoZhk-iqLQ&dib_tag=se&keywords=yonex%2Bezone%2Bblack&qid=1708361700&sprefix=yonex%2Bezone%2Bbla%2Caps%2C169&sr=8-4&th=1"
+amazon_product = "https://www.amazon.com/Yonex-EZONE-Night-Tennis-Racquet/dp/B0CS8DQGT3/ref=pd_ci_mcx_mh_mcx_views_0?pd_rd_w=GpDMq&content-id=amzn1.sym.225b4624-972d-4629-9040-f1bf9923dd95%3Aamzn1.symc.40e6a10e-cbc4-4fa5-81e3-4435ff64d03b&pf_rd_p=225b4624-972d-4629-9040-f1bf9923dd95&pf_rd_r=9MC9ZZW3Q566XV9GMD3M&pd_rd_wg=DWAor&pd_rd_r=7725b019-8907-4ca2-a152-f68bde23231d&pd_rd_i=B0CS8DCPRQ&th=1"
 
 header = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
   "Accept-Language": "en-US,en;q=0.9"
 }
 
+# Create ChromeOptions object
+chrome_options = Options()
+
+# Enable headless mode
+chrome_options.add_argument('--headless')
+chrome_options.add_experimental_option("detach", True)
+chrome_options.add_argument("--enable-javascript")
+
 # Create a WebDriver instance
-driver = webdriver.Chrome()  # Use ChromeDriver (or any other WebDriver)
+driver = webdriver.Chrome(options=chrome_options)  # Use ChromeDriver (or any other WebDriver)
 
 # Navigate to the Amazon product page
 driver.get(amazon_product)
+print("line 28")
 
 try:
-    # Wait for the price element to be visible
-    price_element = WebDriverWait(driver, 50).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, 'a-price-whole'))
-    )
+    price_element = driver.find_element(By.CLASS_NAME, "a-price-whole")
 
+    print("try succeeded")
     # Extract the price text
     price = price_element.text
     print('Price:', price)
