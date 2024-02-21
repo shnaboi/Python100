@@ -10,9 +10,17 @@ events = driver.find_element(By.XPATH, '//*[@id="content"]/div/section/div[2]/di
 
 li_items = events.find_elements(By.TAG_NAME, "li")
 num = 1
+dates_lib = {}
 for li in li_items:
-  date_and_title = li.text
-  print(f"{num}: {date_and_title}")
+  text = li.text.split("\n")
+  info_to_append = {
+    num: {
+      "Date": text[0],
+      "Name": text[1]
+    }
+  }
+  dates_lib.update(info_to_append)
   num += 1
 
+print(dates_lib)
 
