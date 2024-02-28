@@ -20,14 +20,15 @@ houses = soup.find_all(name='div', class_="StyledPropertyCardDataWrapper")
 
 list = []
 for house in houses:
-  link = house.find_next("a", class_="StyledPropertyCardDataArea-anchor")
-  list.append(link)
+  link = house.find_next("a", class_="StyledPropertyCardDataArea-anchor").get_attribute_list("href")
+  address = house.find_next("address").get_text().strip()
+  price = house.find_next("span").get_text()
+  listing = [address, price, link]
+  list.append(listing)
   # print(type(link))
-  test = link.get_attribute_list("href")
-  print(test)
+  print(listing)
+  # print(link)
 #   link is bs4.element.Tag object
-
-# print(list)
 
 """
 Use BeautifulSoup/Requests to scrape all the listings from the Zillow-Clone web address (Step 4 above).
