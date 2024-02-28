@@ -20,9 +20,10 @@ houses = soup.find_all(name='div', class_="StyledPropertyCardDataWrapper")
 
 list = []
 for house in houses:
-  link = house.find_next("a", class_="StyledPropertyCardDataArea-anchor").get_attribute_list("href")
+  link = house.find_next("a", class_="StyledPropertyCardDataArea-anchor").get_attribute_list("href")[0]
   address = house.find_next("address").get_text().strip()
-  price = house.find_next("span").get_text()
+  price_string = house.find_next("span").get_text()
+  price = int(''.join(x for x in price_string if x.isdigit()))
   listing = [address, price, link]
   list.append(listing)
   # print(type(link))
