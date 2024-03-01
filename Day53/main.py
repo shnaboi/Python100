@@ -26,21 +26,31 @@ for house in houses:
   price = int(''.join(x for x in price_string if x.isdigit()))
   listing = [address, price, link]
   list.append(listing)
-  print(listing)
+  # print(listing)
 
 driver = webdriver.Chrome()
 driver.get(google_form)
 
 time.sleep(1)
 
-input_address = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input')
-input_price = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input')
-input_link = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div[1]/div/div[1]/input')
-
 for rental in list:
-  input_address.send_keys(list[0])
-  input_price.send_keys(list[1])
-  input_link.send_keys(list[2])
+  input_address = driver.find_element(By.XPATH,
+                                      '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input')
+  input_price = driver.find_element(By.XPATH,
+                                    '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input')
+  input_link = driver.find_element(By.XPATH,
+                                   '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div[1]/div/div[1]/input')
+  submit_butt = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div/span')
+
+  time.sleep(1)
+  input_address.send_keys(rental[0])
+  input_price.send_keys(rental[1])
+  input_link.send_keys(rental[2])
+  submit_butt.click()
+  time.sleep(1)
+  submit_another = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/div/div[4]/a')
+  submit_another.click()
+
 
 """
 Use BeautifulSoup/Requests to scrape all the listings from the Zillow-Clone web address (Step 4 above).
