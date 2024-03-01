@@ -26,10 +26,21 @@ for house in houses:
   price = int(''.join(x for x in price_string if x.isdigit()))
   listing = [address, price, link]
   list.append(listing)
-  # print(type(link))
   print(listing)
-  # print(link)
-#   link is bs4.element.Tag object
+
+driver = webdriver.Chrome()
+driver.get(google_form)
+
+time.sleep(1)
+
+input_address = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input')
+input_price = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input')
+input_link = driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div[1]/div/div[1]/input')
+
+for rental in list:
+  input_address.send_keys(list[0])
+  input_price.send_keys(list[1])
+  input_link.send_keys(list[2])
 
 """
 Use BeautifulSoup/Requests to scrape all the listings from the Zillow-Clone web address (Step 4 above).
