@@ -1,27 +1,33 @@
-import time
+from flask import Flask
 
-def speed_calc_decorator(func):
+app = Flask(__name__)
+
+
+def make_bold(func):
   def wrapper():
-    start_time = time.time()
-    func()
-    new_time = time.time()
-    time_dif = new_time - start_time
-    print(f'{func.__name__} run spd: {time_dif} sec')
+    return f"<b>{func()}</b>"
+  return wrapper
 
+def make_italic(func):
+  def wrapper():
+    return f"<em>{func()}</em>"
+  return wrapper
+
+def make_underlined(func):
+  def wrapper():
+    return f"<u>{func()}</u>"
   return wrapper
 
 
-@speed_calc_decorator
-def fast_function():
-  for i in range(1000000):
-    i * i
+@app.route("/")
+def hello_world():
+  return "<p>Hello, World!</p>"
 
 
-@speed_calc_decorator
-def slow_function():
-  for i in range(10000000):
-    i * i
+@app.route("/bye")
+@make_bold
+@make_underlined
+@make_italic
+def bye():
+  return "Bye!"
 
-
-fast_function()
-slow_function()
