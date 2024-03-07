@@ -32,10 +32,17 @@ def homepage():
 # create func that has if statements to tell if number was guessed correct or high or low
 @app.route("/<guess>")
 def num_guess(guess):
-  html = f"{guess}"
-  # if
-  #   html = f"""
-  #     <h1>You guessed the correct answer! Reload the server to play again.</h1>
-  #     """
+  if int(guess) == num:
+    html = f"""
+      <h1>You guessed the correct answer! Reload the server to play again.</h1>
+      """
+  elif num < int(guess):
+    html = f"""
+      <h1>You're guess is too <strong>high</strong>.</h1>
+      """
+  else:
+    html = f"""
+      <h1>You're guess is too <strong>low</strong>.
+      """
   return html
 
