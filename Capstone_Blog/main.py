@@ -3,10 +3,11 @@ import requests
 
 app = Flask(__name__)
 
-blog_post_api = "https://api.npoint.io/c790b4d5cab58020d391"
+blog_post_api = "https://api.npoint.io/674f5423f73deab1e9a7"
 response = requests.get(blog_post_api)
 response.raise_for_status()
 blog_data = response.json()
+print(blog_data)
 
 # render homepage when server is started
 @app.route('/')
@@ -22,8 +23,8 @@ def get_blog_post(post_num):
   for blog in blog_data:
     if blog["id"] == num:
       blog_post = blog
-    # print(blog_post, blog)
-    # print(type(blog["id"]), type(post_num))
+  print(blog)
+
   return render_template("./post.html", blog=blog_post)
 
 if __name__ == "__main__":
