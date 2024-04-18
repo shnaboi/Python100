@@ -14,6 +14,14 @@ print(blog_data)
 def home():
   return render_template("./index.html", blog_data=blog_data)
 
+@app.route('/about')
+def about():
+  return render_template('./about.html')
+
+@app.route('/contact')
+def contact():
+  return render_template('./contact.html')
+
 # get_blog_post(x) is called as an href (when clicked) on the html doc,
 # when the <a href=""> is generated, it passes through the id of the correct blog post
 @app.route('/post/<post_num>')
