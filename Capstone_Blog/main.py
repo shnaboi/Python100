@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 import requests
 
 app = Flask(__name__)
@@ -24,6 +24,15 @@ def contact():
 
 # get_blog_post(x) is called as an href (when clicked) on the html doc,
 # when the <a href=""> is generated, it passes through the id of the correct blog post
+
+@app.route('/data_sent', methods=['POST'])
+def data_sent():
+  name = request.form['name']
+  email = request.form['email']
+  phone = request.form['phone']
+  message = request.form['message']
+  return f"{name}, {email}, {phone}, {message}"
+
 @app.route('/post/<post_num>')
 def get_blog_post(post_num):
   blog_post = 'None'
