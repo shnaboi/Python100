@@ -18,20 +18,28 @@ def home():
 def about():
   return render_template('./about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['POST', 'GET'])
 def contact():
-  return render_template('./contact.html')
+  if request.method == 'POST':
+    name = request.form['name']
+    email = request.form['email']
+    phone = request.form['phone']
+    message = request.form['message']
+    print(f"{name}, {phone}, {email}, {message}")
+    return render_template("./contact.html", msg_sent=True)
+  return render_template('./contact.html', msg_sent=False)
 
 # get_blog_post(x) is called as an href (when clicked) on the html doc,
 # when the <a href=""> is generated, it passes through the id of the correct blog post
 
-@app.route('/data_sent', methods=['POST'])
-def data_sent():
-  name = request.form['name']
-  email = request.form['email']
-  phone = request.form['phone']
-  message = request.form['message']
-  return f"{name}, {email}, {phone}, {message}"
+# @app.route('/contact', methods=['POST', 'GET'])
+# def data_sent():
+#   if request.method == 'POST':
+#     name = request.form['name']
+#     email = request.form['email']
+#     phone = request.form['phone']
+#     message = request.form['message']
+#     return render_template("./contact.html")
 
 @app.route('/post/<post_num>')
 def get_blog_post(post_num):
